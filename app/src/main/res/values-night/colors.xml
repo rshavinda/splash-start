@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Dark theme palette -->
+    <color name="color_status_bar">@color/black</color>
+    <color name="color_app_bar">@color/grey_900</color>
+    <color name="color_background">#303030</color>
+    <color name="color_cards_dialogs">@color/grey_800</color>
+
+    <color name="color_base">@color/white</color>
+    <color name="color_text">@color/white_text_primary</color>
+    <color name="color_text_secondary">@color/white_text_secondary</color>
+    <color name="color_text_disabled">@color/white_text_disabled</color>
+    <color name="color_dividers">@color/white_dividers</color>
+
+    <color name="color_user_name">#83BBF8</color>
+    <color name="color_user_data_text">@color/orange_600</color>
+
+    <color name="color_background_card_1">#3C3C3C</color>
+    <color name="color_background_card_2">#353535</color>
+
+    <color name="color_background_button_1">@color/orange_100</color>
+    <color name="color_background_button_2">@color/orange_200</color>
+    <color name="color_background_button_3">@color/orange_300</color>
+
+    <color name="color_background_box_1">@color/grey_500</color>
+</resources>

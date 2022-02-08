@@ -5,6 +5,123 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Light theme palette -->
+    <color name="color_status_bar">@color/grey_100</color>
+    <color name="color_app_bar">@color/grey_400</color>
+    <color name="color_background">@color/grey_50</color>
+    <color name="color_cards_dialogs">@color/white</color>
+
+    <color name="color_base">@color/black</color>
+    <color name="color_text">@color/black_text_primary</color>
+    <color name="color_text_secondary">@color/black_text_secondary</color>
+    <color name="color_text_disabled">@color/black_text_disabled</color>
+    <color name="color_dividers">@color/black_dividers</color>
+
+    <color name="color_user_name">#163c66</color>
+    <color name="color_user_data_text">#0C2E53</color>
+
+    <color name="color_background_card_1">@color/grey_50</color>
+    <color name="color_background_card_2">@color/grey_100</color>
+
+    <color name="color_background_button_1">@color/orange_100</color>
+    <color name="color_background_button_2">@color/orange_200</color>
+    <color name="color_background_button_3">@color/orange_300</color>
+
+    <color name="color_background_box_1">@color/grey_500</color>
+
+    <!-- Black -->
+    <color name="black">#000000</color>
+    <color name="black_dividers">#1f000000</color>
+    <color name="black_text_disabled">#42000000</color>
+    <color name="black_text_secondary">#8a000000</color>
+    <color name="black_text_primary">#de000000</color>
+
+    <!-- White -->
+    <color name="white">#ffffff</color>
+    <color name="white_dividers">#1fffffff</color>
+    <color name="white_text_disabled">#4dffffff</color>
+    <color name="white_text_secondary">#b3ffffff</color>
+    <color name="white_text_primary">#ffffff</color>
+
+    <!-- Grey -->
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_900">#212121</color>
+
+    <!-- Blue Grey -->
+    <color name="blue_grey_50">#ECEFF1</color>
+    <color name="blue_grey_100">#CFD8DC</color>
+    <color name="blue_grey_200">#B0BBC5</color>
+    <color name="blue_grey_300">#90A4AE</color>
+    <color name="blue_grey_400">#78909C</color>
+    <color name="blue_grey_500">#607D8B</color>
+    <color name="blue_grey_600">#546E7A</color>
+    <color name="blue_grey_700">#455A64</color>
+    <color name="blue_grey_800">#37474F</color>
+    <color name="blue_grey_900">#263238</color>
+
+    <!-- Orange -->
+    <color name="orange_50">#FFF3E0</color>
+    <color name="orange_100">#FFE0B2</color>
+    <color name="orange_200">#FFCC80</color>
+    <color name="orange_300">#FFB74D</color>
+    <color name="orange_400">#FFA726</color>
+    <color name="orange_500">#FF9800</color>
+    <color name="orange_600">#FB8C00</color>
+    <color name="orange_700">#F57C00</color>
+    <color name="orange_800">#EF6C00</color>
+    <color name="orange_900">#E65100</color>
+    <color name="orange_A100">#FFD180</color>
+    <color name="orange_A200">#FFAB40</color>
+    <color name="orange_A400">#FF9100</color>
+    <color name="orange_A700">#FF6D00</color>
+
+    <!-- Deep Orange -->
+    <color name="deep_orange_50">#FBE9A7</color>
+    <color name="deep_orange_100">#FFCCBC</color>
+    <color name="deep_orange_200">#FFAB91</color>
+    <color name="deep_orange_300">#FF8A65</color>
+    <color name="deep_orange_400">#FF7043</color>
+    <color name="deep_orange_500">#FF5722</color>
+    <color name="deep_orange_600">#F4511E</color>
+    <color name="deep_orange_700">#E64A19</color>
+    <color name="deep_orange_800">#D84315</color>
+    <color name="deep_orange_900">#BF360C</color>
+    <color name="deep_orange_A100">#FF9E80</color>
+    <color name="deep_orange_A200">#FF6E40</color>
+    <color name="deep_orange_A400">#FF3D00</color>
+    <color name="deep_orange_A700">#DD2600</color>
+
+    <!-- THEMES -->
+    <!-- Light theme palette -->
+    <color name="light_theme_status_bar">@color/grey_300</color>
+    <color name="light_theme_app_bar">@color/grey_100</color>
+    <color name="light_theme_background">@color/grey_50</color>
+    <color name="light_theme_cards_dialogs">@color/white</color>
+
+    <color name="light_theme_base">@color/black</color>
+    <color name="light_theme_text">@color/black_text_primary</color>
+    <color name="light_theme_text_secondary">@color/black_text_secondary</color>
+    <color name="light_theme_text_disabled">@color/black_text_disabled</color>
+    <color name="light_theme_dividers">@color/black_dividers</color>
+
+    <!-- Dark theme palette -->
+    <color name="dark_theme_status_bar">@color/black</color>
+    <color name="dark_theme_app_bar">@color/grey_900</color>
+    <color name="dark_theme_background">#303030</color>
+    <color name="dark_theme_cards_dialogs">@color/grey_800</color>
+
+    <color name="dark_theme_base">@color/white</color>
+    <color name="dark_theme_text">@color/white_text_primary</color>
+    <color name="dark_theme_text_secondary">@color/white_text_secondary</color>
+    <color name="dark_theme_text_disabled">@color/white_text_disabled</color>
+    <color name="dark_theme_dividers">@color/white_dividers</color>
 </resources>
