@@ -1,14 +1,10 @@
-package com.acentura.splashstart.util;
-
-import com.google.gson.Gson;
+package com.acentura.splashstart.util.reponse;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 import retrofit2.HttpException;
-import timber.log.Timber;
 
 public class ResponseHandler {
 
@@ -147,6 +143,7 @@ public class ResponseHandler {
             case Code.C511_NETWORK_AUTHENTICATION_REQUIRED: return "Network Authentication Required";
 
             case Code.C999_REQUEST_DENIED : return "Unable to Process Request/Request Denied";
+            case Code.CE999_CUSTOM_ERROR_NOT_CONNECTED : return "No Internet Connection";
             default: return "";
         }
     }
@@ -269,7 +266,7 @@ public class ResponseHandler {
         public static final String UNKNOWN = "Unknown";
     }
 
-        public static class Code {
+    public static class Code {
         public static final int C100_CONTINUE = 100;
         public static final int C101_SWITCHING_PROTOCOL = 101;
         public static final int C102_PROCESSING = 102;

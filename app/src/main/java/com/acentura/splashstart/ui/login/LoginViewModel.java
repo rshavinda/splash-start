@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.acentura.splashstart.data.network.model.Post;
 import com.acentura.splashstart.data.repository.RestApiRepository;
-import com.acentura.splashstart.util.NetResource;
+import com.acentura.splashstart.util.reponse.NetResource;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;

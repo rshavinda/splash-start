@@ -1,7 +1,9 @@
-package com.acentura.splashstart.util;
+package com.acentura.splashstart.util.reponse;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.List;
 
 public class NetResource <T>{
     @NonNull
@@ -48,6 +50,14 @@ public class NetResource <T>{
         return new NetResource<>(Status.LOADING, null, -1, null);
     }
 
+
+    public boolean isDataAvailable(){
+        if(data == null) return false;
+        if(data instanceof List<?>){
+            return !((List<?>) data).isEmpty();
+        }
+        return true;
+    }
 
     public enum Status {SUCCESS, ERROR, LOADING, NOT_CONNECTED}
 }

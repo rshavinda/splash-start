@@ -8,4 +8,8 @@ public class AppConstants {
     public static final String BUTTON_RETRY = "Retry";
     public static final String BUTTON_CONFIRM = "Confirm";
     public static final String BUTTON_CANCEL = "Cancel";
+
+    public static class AnimPath{
+        public static final String NET_CONNECTING = "lottie/hub_connecting.json";
+    }
 }
