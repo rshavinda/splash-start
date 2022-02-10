@@ -6,6 +6,14 @@
     tools:ignore="UnusedAttribute" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+    <permission android:name="com.google.android.gsf.permission.GOOGLE_AUTH" android:protectionLevel="normal" android:permissionGroup="android.permission-group.ACCOUNTS" />
+    <permission android:name="com.google.android.gsf.permission.GOOGLE_AUTH.ALL_SERVICES" android:protectionLevel="signatureOrSystem" android:permissionGroup="android.permission-group.ACCOUNTS" />
+    <permission android:name="com.google.android.gsf.permission.GOOGLE_AUTH.OTHER_SERVICES" android:protectionLevel="dangerous" android:permissionGroup="android.permission-group.ACCOUNTS"  />
+    <permission android:name="com.google.android.gsf.permission.GOOGLE_AUTH.mail" android:protectionLevel="dangerous" android:permissionGroup="android.permission-group.ACCOUNTS" />
+    <permission android:name="com.google.android.gsf.permission.GOOGLE_AUTH.cl" android:protectionLevel="dangerous" android:permissionGroup="android.permission-group.ACCOUNTS"  />
 
     <application
         android:name=".base.BaseApplication"
@@ -22,6 +30,7 @@
             android:name=".ui.login.LoginActivity"
             android:exported="true"
             android:theme="@style/NoActionBar"/>
+
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
@@ -31,10 +40,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.SplashStart"/>
+
+        <activity android:name="com.microsoft.identity.client.BrowserTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="com.acentura.splashstart"
+                    android:path="/YFPCoAvfSbYH1HwIxMQYZtfBbIU="
+                    android:scheme="msauth" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

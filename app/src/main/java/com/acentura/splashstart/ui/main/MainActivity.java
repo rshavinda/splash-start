@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +20,9 @@ import com.acentura.splashstart.R;
 import com.acentura.splashstart.base.BaseBindingActivity;
 import com.acentura.splashstart.databinding.ActivityMainBinding;
 import com.acentura.splashstart.di.module.viewmodelfactory.ViewModelFactory;
+import com.acentura.splashstart.service.auth.AuthenticationHelper;
+import com.acentura.splashstart.service.auth.GraphHelper;
+import com.acentura.splashstart.ui.login.LoginActivity;
 import com.acentura.splashstart.ui.main.fragments.EventFragment;
 import com.acentura.splashstart.ui.main.fragments.HomeFragment;
 import com.acentura.splashstart.ui.main.fragments.MainFragment;
@@ -24,6 +30,10 @@ import com.acentura.splashstart.util.HelperUtil;
 import com.acentura.splashstart.util.reponse.ConnectionErrorDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.microsoft.identity.client.IAuthenticationResult;
+import com.microsoft.identity.client.exception.MsalClientException;
+import com.microsoft.identity.client.exception.MsalServiceException;
+import com.microsoft.identity.client.exception.MsalUiRequiredException;
 
 import javax.inject.Inject;
 
@@ -46,6 +56,7 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, MainV
     private String mUserName = null;
     private String mUserEmail = null;
     private String mUserTimeZone = null;
+    private AuthenticationHelper mAuthHelper = null;
 
     @Override
     protected int layoutResId() {
@@ -116,6 +127,18 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, MainV
 
       //  getViewModel().getPosts();
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            AuthenticationHelper.getInstance(getApplicationContext())
+                    .thenAccept(authHelper -> {
+                        mAuthHelper = authHelper;
+                        mIsSignedIn = true;
+                    })
+                    .exceptionally(exception -> {
+                        Log.e("AUTH", "Error creating auth helper", exception);
+                        return null;
+                    });
+        }
 
         setSupportActionBar(getBinding().toolbar);
 
@@ -216,14 +239,11 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, MainV
         }
 
         // Set the user name and email in the nav drawer
-        TextView userName = mHeaderView.findViewById(R.id.user_name);
-        TextView userEmail = mHeaderView.findViewById(R.id.user_email);
+        TextView userName = mHeaderView.findViewById(R.id.tvUserName);
+        TextView userEmail = mHeaderView.findViewById(R.id.tvUserEmail);
 
         if (isSignedIn) {
             // For testing
-            mUserName = "Lynne Robbins";
-            mUserEmail = "lynner@contoso.com";
-            mUserTimeZone = "Pacific Standard Time";
 
             userName.setText(mUserName);
             userEmail.setText(mUserEmail);
@@ -238,16 +258,115 @@ public class MainActivity extends BaseBindingActivity<ActivityMainBinding, MainV
     }
 
     private void signIn() {
-        setSignedInState(true);
+        showProgress();
+        doSilentSignIn(true);
+
+    }
+
+    private void signOut() {
+
+        mAuthHelper.signOut();
+
+        setSignedInState(false);
         addFragment(R.id.fragmentContainer,
                 HomeFragment.createInstance(mUserName), false);
         getBinding().navigationView.setCheckedItem(R.id.nav_home);
     }
 
-    private void signOut() {
-        setSignedInState(false);
-        addFragment(R.id.fragmentContainer,
-                HomeFragment.createInstance(mUserName), false);
-        getBinding().navigationView.setCheckedItem(R.id.nav_home);
+    // Silently sign in - used if there is already a
+// user account in the MSAL cache
+    private void doSilentSignIn(boolean shouldAttemptInteractive) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mAuthHelper.acquireTokenSilently()
+                    .thenAccept(authenticationResult -> {
+                        handleSignInSuccess(authenticationResult);
+                    })
+                    .exceptionally(exception -> {
+                        // Check the type of exception and handle appropriately
+                        Throwable cause = exception.getCause();
+                        if (cause instanceof MsalUiRequiredException) {
+                            Log.d("AUTH", "Interactive login required");
+                            if (shouldAttemptInteractive) doInteractiveSignIn();
+                        } else if (cause instanceof MsalClientException) {
+                            MsalClientException clientException = (MsalClientException)cause;
+                            if (clientException.getErrorCode() == "no_current_account" ||
+                                    clientException.getErrorCode() == "no_account_found") {
+                                Log.d("AUTH", "No current account, interactive login required");
+                                if (shouldAttemptInteractive) doInteractiveSignIn();
+                            }
+                        } else {
+                            handleSignInFailure(cause);
+                        }
+                        dismissProgress();
+                        return null;
+                    });
+        }
+    }
+
+
+    // Handles the authentication result
+    private void handleSignInSuccess(IAuthenticationResult authenticationResult) {
+        // Log the token for debug purposes
+        String accessToken = authenticationResult.getAccessToken();
+        Log.d("AUTH", String.format("Access token: %s", accessToken));
+
+        // Get Graph client and get user
+        GraphHelper graphHelper = GraphHelper.getInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            graphHelper.getUser()
+                    .thenAccept(user -> {
+                        mUserName = user.displayName == null ? "User" :user.displayName;
+                        mUserEmail = user.mail == null ? user.userPrincipalName : user.mail;
+//                        mUserTimeZone = user.mailboxSettings.timeZone;
+
+                        Log.d("AUTH", String.format("Access: %s  %s  %s", mUserName, mUserEmail, mUserTimeZone));
+
+                        runOnUiThread(() -> {
+                            dismissProgress();
+
+                            setSignedInState(true);
+                            addFragment(R.id.fragmentContainer,
+                                    HomeFragment.createInstance(mUserName), false);
+                            getBinding().navigationView.setCheckedItem(R.id.nav_home);
+                        });
+                    })
+                    .exceptionally(exception -> {
+                        Log.e("AUTH", "Error getting /me", exception);
+
+                        runOnUiThread(()-> {
+                            dismissProgress();
+                            showMessage(exception.getMessage());
+                        });
+
+                        return null;
+                    });
+        }
+    }
+
+    private void handleSignInFailure(Throwable exception) {
+        if (exception instanceof MsalServiceException) {
+            // Exception when communicating with the auth server, likely config issue
+            Log.e("AUTH", "Service error authenticating", exception);
+        } else if (exception instanceof MsalClientException) {
+            // Exception inside MSAL, more info inside MsalError.java
+            Log.e("AUTH", "Client error authenticating", exception);
+        } else {
+            Log.e("AUTH", "Unhandled exception authenticating", exception);
+        }
+    }
+
+    // Prompt the user to sign in
+    private void doInteractiveSignIn() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mAuthHelper.acquireTokenInteractively(this)
+                    .thenAccept(authenticationResult -> {
+                        handleSignInSuccess(authenticationResult);
+                    })
+                    .exceptionally(exception -> {
+                        handleSignInFailure(exception);
+                        dismissProgress();
+                        return null;
+                    });
+        }
     }
 }
